@@ -5,6 +5,7 @@ import org.test.domain.Product;
 import org.test.storage.Repository;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -37,11 +38,13 @@ public class Shop implements AbstractShop {
 
 	@Override
 	public Product[] getProducts(Category category) {
-		return new Product[0];
+		List<Product> found = repository.findByCategory(category);
+		return found.toArray(new Product[found.size()]);
 	}
 
 	@Override
 	public void addProduct(Product product, Category category) {
-
+		product.setCategory(category);
+		repository.insert(product);
 	}
 }

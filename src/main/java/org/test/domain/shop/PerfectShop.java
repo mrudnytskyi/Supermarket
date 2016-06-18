@@ -2,7 +2,7 @@ package org.test.domain.shop;
 
 import org.test.domain.Category;
 import org.test.domain.Product;
-import org.test.storage.Repository;
+import org.test.storage.MockRepository;
 
 import java.util.Set;
 
@@ -16,8 +16,7 @@ import java.util.Set;
  * @version 18.06.2016
  */
 public enum PerfectShop implements AbstractShop {
-	INSTANCE(new Shop(new Repository() {
-	}, "Perfect Goods", "Luxury Goods", "Exotic Goods"));
+	INSTANCE(new Shop(new MockRepository(), "Perfect Goods", "Luxury Goods", "Exotic Goods"));
 
 	private final Shop shop;
 

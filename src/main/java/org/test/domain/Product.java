@@ -1,5 +1,7 @@
 package org.test.domain;
 
+import java.util.Objects;
+
 /**
  * @author Myroslav Rudnytskyi
  * @version 18.06.2016
@@ -40,5 +42,21 @@ public class Product {
 
 	public void setCategory(Category category) {
 		this.category = category;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Product product = (Product) o;
+		return price == product.price &&
+				Objects.equals(title, product.title) &&
+				status == product.status &&
+				Objects.equals(category, product.category);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(title, price, status, category);
 	}
 }
