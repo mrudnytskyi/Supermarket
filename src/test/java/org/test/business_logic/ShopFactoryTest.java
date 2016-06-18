@@ -20,7 +20,7 @@ public class ShopFactoryTest {
 		// setup
 		ShopFactory factory = () -> PerfectShop.INSTANCE;
 		// execute
-		Shop shop = factory.createShop();
+		AbstractShop shop = factory.createShop();
 		// verify
 		assertThat(shop, is(notNullValue()));
 		assertTrue(shop instanceof PerfectShop);
@@ -31,7 +31,7 @@ public class ShopFactoryTest {
 		// setup
 		ShopFactory factory = () -> CheapShop.INSTANCE;
 		// execute
-		Shop shop = factory.createShop();
+		AbstractShop shop = factory.createShop();
 		// verify
 		assertThat(shop, is(notNullValue()));
 		assertTrue(shop instanceof CheapShop);

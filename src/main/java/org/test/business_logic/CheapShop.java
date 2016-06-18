@@ -1,5 +1,7 @@
 package org.test.business_logic;
 
+import org.test.storage.Repository;
+
 /**
  * Concrete shop class. Note, that this class created as
  * <a href="https://en.wikipedia.org/wiki/Singleton_pattern">singleton</a> due to business-rules.
@@ -9,6 +11,13 @@ package org.test.business_logic;
  * @author Myroslav Rudnytskyi
  * @version 18.06.2016
  */
-public enum CheapShop implements Shop {
-	INSTANCE
+public enum CheapShop implements AbstractShop {
+	INSTANCE(new Shop(new Repository() {
+	}, "Cheap Goods", "Basic Goods"));
+
+	private final Shop shop;
+
+	CheapShop(Shop shop) {
+		this.shop = shop;
+	}
 }

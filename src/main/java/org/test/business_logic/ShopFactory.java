@@ -11,5 +11,5 @@ package org.test.business_logic;
 @FunctionalInterface
 public interface ShopFactory {
 
-	Shop createShop();
+	AbstractShop createShop();
 }
