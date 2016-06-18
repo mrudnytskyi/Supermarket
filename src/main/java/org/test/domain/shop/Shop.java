@@ -1,6 +1,7 @@
 package org.test.domain.shop;
 
 import org.test.domain.Category;
+import org.test.domain.Product;
 import org.test.storage.Repository;
 
 import java.util.HashSet;
@@ -32,5 +33,15 @@ public class Shop implements AbstractShop {
 	@Override
 	public Set<Category> getCategories() {
 		return categories;
+	}
+
+	@Override
+	public Product[] getProducts(Category category) {
+		return new Product[0];
+	}
+
+	@Override
+	public void addProduct(Product product, Category category) {
+
 	}
 }

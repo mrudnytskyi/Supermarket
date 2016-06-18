@@ -1,6 +1,7 @@
 package org.test.domain.shop;
 
 import org.test.domain.Category;
+import org.test.domain.Product;
 
 import java.util.Set;
 
@@ -13,5 +14,9 @@ import java.util.Set;
 public interface AbstractShop {
 
 	Set<Category> getCategories();
+
+	Product[] getProducts(Category category);
+
+	void addProduct(Product product, Category category);
 
 }

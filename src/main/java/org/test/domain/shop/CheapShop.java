@@ -1,6 +1,7 @@
 package org.test.domain.shop;
 
 import org.test.domain.Category;
+import org.test.domain.Product;
 import org.test.storage.Repository;
 
 import java.util.Set;
@@ -27,5 +28,15 @@ public enum CheapShop implements AbstractShop {
 	@Override
 	public Set<Category> getCategories() {
 		return shop.getCategories();
+	}
+
+	@Override
+	public Product[] getProducts(Category category) {
+		return shop.getProducts(category);
+	}
+
+	@Override
+	public void addProduct(Product product, Category category) {
+		shop.addProduct(product, category);
 	}
 }
