@@ -18,7 +18,7 @@ public class ShopFactoryTest {
 	@Test
 	public void testCreatePerfectShop() throws Exception {
 		// setup
-		ShopFactory factory = PerfectShop::new;
+		ShopFactory factory = () -> PerfectShop.INSTANCE;
 		// execute
 		Shop shop = factory.createShop();
 		// verify
@@ -29,7 +29,7 @@ public class ShopFactoryTest {
 	@Test
 	public void testCreateCheapShop() throws Exception {
 		// setup
-		ShopFactory factory = CheapShop::new;
+		ShopFactory factory = () -> CheapShop.INSTANCE;
 		// execute
 		Shop shop = factory.createShop();
 		// verify
