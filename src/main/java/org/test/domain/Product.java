@@ -1,30 +1,35 @@
 package org.test.domain;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 
 /**
+ * Domain object represents product.
+ * <p>Note, that product title and category create unique identifier.</p>
+ *
  * @author Myroslav Rudnytskyi
  * @version 18.06.2016
  */
 public class Product {
-	private String title;
-	private int price;
+	private final String title;
+	private final Category category;
+	private BigDecimal price;
 	private ProductStatus status;
-	private Category category;
+
+	public Product(String title, Category category) {
+		this.title = title;
+		this.category = category;
+	}
 
 	public String getTitle() {
 		return title;
 	}
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	public int getPrice() {
+	public BigDecimal getPrice() {
 		return price;
 	}
 
-	public void setPrice(int price) {
+	public void setPrice(BigDecimal price) {
 		this.price = price;
 	}
 
@@ -40,16 +45,12 @@ public class Product {
 		return category;
 	}
 
-	public void setCategory(Category category) {
-		this.category = category;
-	}
-
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		Product product = (Product) o;
-		return price == product.price &&
+		return Objects.equals(price, product.price) &&
 				Objects.equals(title, product.title) &&
 				status == product.status &&
 				Objects.equals(category, product.category);

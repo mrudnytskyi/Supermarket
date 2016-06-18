@@ -54,15 +54,16 @@ public class ShopTest {
 		// setup
 		Repository mock = Mockito.mock(Repository.class);
 		Category category = new Category("test");
+		final Product product = new Product("test product", new Category("test category"));
 		Mockito.when(mock.findByCategory(category)).thenReturn(new ArrayList<Product>() {{
-			add(new Product());
+			add(product);
 		}});
 		Shop shop = new Shop(mock);
 		// execute
 		Product[] actualProducts = shop.getProducts(category);
 		// verify
 		assertThat(actualProducts, is(notNullValue()));
-		assertArrayEquals(new Product[]{new Product()}, actualProducts);
+		assertArrayEquals(new Product[]{product}, actualProducts);
 		Mockito.verify(mock, times(1));
 	}
 }
