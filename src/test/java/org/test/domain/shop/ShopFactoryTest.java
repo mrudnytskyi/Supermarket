@@ -1,6 +1,7 @@
-package org.test.business_logic;
+package org.test.domain.shop;
 
 import org.junit.Test;
+import org.test.domain.Category;
 
 import java.util.HashSet;
 import java.util.Set;

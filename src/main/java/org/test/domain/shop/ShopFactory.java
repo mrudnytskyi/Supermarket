@@ -1,4 +1,4 @@
-package org.test.business_logic;
+package org.test.domain.shop;
 
 /**
  * Represents API for creating {@code Shop} object, do not specifying concrete classes.

@@ -1,5 +1,6 @@
-package org.test.business_logic;
+package org.test.domain.shop;
 
+import org.test.domain.Category;
 import org.test.storage.Repository;
 
 import java.util.Set;
@@ -13,13 +14,13 @@ import java.util.Set;
  * @author Myroslav Rudnytskyi
  * @version 18.06.2016
  */
-public enum PerfectShop implements AbstractShop {
+public enum CheapShop implements AbstractShop {
 	INSTANCE(new Shop(new Repository() {
-	}, "Perfect Goods", "Luxury Goods", "Exotic Goods"));
+	}, "Cheap Goods", "Basic Goods"));
 
 	private final Shop shop;
 
-	PerfectShop(Shop shop) {
+	CheapShop(Shop shop) {
 		this.shop = shop;
 	}
 

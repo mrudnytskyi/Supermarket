@@ -1,4 +1,6 @@
-package org.test.business_logic;
+package org.test.domain.shop;
+
+import org.test.domain.Category;
 
 import java.util.Set;
 

@@ -1,8 +1,10 @@
-package org.test.business_logic;
+package org.test.domain;
 
 import java.util.Objects;
 
 /**
+ * Domain object represents product category in shop.
+ *
  * @author Myroslav Rudnytskyi
  * @version 18.06.2016
  */
