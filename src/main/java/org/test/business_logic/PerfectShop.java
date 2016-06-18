@@ -2,6 +2,8 @@ package org.test.business_logic;
 
 import org.test.storage.Repository;
 
+import java.util.Set;
+
 /**
  * Concrete shop class. Note, that this class created as
  * <a href="https://en.wikipedia.org/wiki/Singleton_pattern">singleton</a> due to business-rules.
@@ -19,5 +21,10 @@ public enum PerfectShop implements AbstractShop {
 
 	PerfectShop(Shop shop) {
 		this.shop = shop;
+	}
+
+	@Override
+	public Set<Category> getCategories() {
+		return shop.getCategories();
 	}
 }

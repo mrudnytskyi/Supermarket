@@ -1,5 +1,7 @@
 package org.test.business_logic;
 
+import java.util.Set;
+
 /**
  * Shop abstraction.
  *
@@ -7,5 +9,7 @@ package org.test.business_logic;
  * @version 18.06.2016
  */
 public interface AbstractShop {
+
+	Set<Category> getCategories();
 
 }
