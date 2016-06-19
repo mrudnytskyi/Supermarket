@@ -16,4 +16,6 @@ public interface Repository {
 	List<Product> findByCategory(Category category);
 
 	void insert(Product product);
+
+	void update(Product product);
 }

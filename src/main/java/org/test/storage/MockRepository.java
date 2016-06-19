@@ -22,4 +22,9 @@ public class MockRepository implements Repository {
 	@Override
 	public void insert(Product product) {
 	}
+
+	@Override
+	public void update(Product product) {
+
+	}
 }
