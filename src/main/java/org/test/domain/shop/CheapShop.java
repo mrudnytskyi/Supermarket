@@ -3,7 +3,7 @@ package org.test.domain.shop;
 import org.test.domain.Category;
 import org.test.domain.Product;
 import org.test.domain.ProductStatus;
-import org.test.storage.MockRepository;
+import org.test.storage.MongoRepository;
 
 import java.math.BigDecimal;
 import java.util.Set;
@@ -18,7 +18,7 @@ import java.util.Set;
  * @version 18.06.2016
  */
 public enum CheapShop implements AbstractShop {
-	INSTANCE(new Shop(new MockRepository(), "Cheap Goods", "Basic Goods"));
+	INSTANCE(new Shop(new MongoRepository(), "Cheap Goods", "Basic Goods"));
 
 	private final Shop shop;
 

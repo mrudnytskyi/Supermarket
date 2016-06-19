@@ -39,7 +39,9 @@ public class MongoRepository implements Repository {
 	public MongoRepository(String host, int port) {
 		client = new MongoClient(host, port);
 		database = client.getDatabase(DATABASE_NAME);
-		database.createCollection(COLLECTION_NAME);
+		if (database.getCollection(COLLECTION_NAME) == null) {
+			database.createCollection(COLLECTION_NAME);
+		}
 		productsCollection = database.getCollection(COLLECTION_NAME);
 	}
 
