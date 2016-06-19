@@ -25,6 +25,9 @@ public class MockRepository implements Repository {
 
 	@Override
 	public void update(Product product) {
+	}
 
+	@Override
+	public void close() {
 	}
 }
