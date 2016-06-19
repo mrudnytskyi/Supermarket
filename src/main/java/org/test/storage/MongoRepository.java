@@ -6,6 +6,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
+import org.bson.types.ObjectId;
 import org.test.domain.Category;
 import org.test.domain.Product;
 
@@ -65,9 +66,21 @@ public class MongoRepository implements Repository {
 
 	@Override
 	public void update(Product product) {
+		ObjectId id = getObjectId(product);
 		Document update = new Document("$set",
 				new Document("price", product.getPrice().toString()).append("status", product.getStatus().name()));
-		productsCollection.updateOne(eq("title", product.getTitle()), update);
+		productsCollection.updateOne(eq("_id", id), update);
+	}
+
+	private ObjectId getObjectId(Product product) {
+		ObjectId id = null;
+		for (Document document : productsCollection.find(eq("title", product.getTitle()))) {
+			String category = document.get("category").toString();
+			if (category.equals(product.getCategory().toString())) {
+				id = (ObjectId) document.get("_id");
+			}
+		}
+		return id;
 	}
 
 	@Override

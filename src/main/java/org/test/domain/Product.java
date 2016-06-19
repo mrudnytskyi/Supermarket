@@ -5,7 +5,6 @@ import java.util.Objects;
 
 /**
  * Domain object represents product.
- * <p>Note, that product title and category create unique identifier.</p>
  *
  * @author Myroslav Rudnytskyi
  * @version 18.06.2016
