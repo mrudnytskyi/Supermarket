@@ -4,9 +4,11 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import org.test.domain.Category;
 import org.test.domain.Product;
+import org.test.domain.ProductStatus;
 import org.test.storage.MockRepository;
 import org.test.storage.Repository;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -54,7 +56,7 @@ public class ShopTest {
 		// setup
 		Repository mock = Mockito.mock(Repository.class);
 		Category category = new Category("test");
-		final Product product = new Product("test product", new Category("test category"));
+		Product product = new Product("test product", new Category("test category"));
 		Mockito.when(mock.findByCategory(category)).thenReturn(new ArrayList<Product>() {{
 			add(product);
 		}});
@@ -65,5 +67,33 @@ public class ShopTest {
 		assertThat(actualProducts, is(notNullValue()));
 		assertArrayEquals(new Product[]{product}, actualProducts);
 		Mockito.verify(mock, times(1));
+	}
+
+	@Test(expected = NullPointerException.class)
+	public void testNullConstructorParameter() throws Exception {
+		new Shop(null);
+	}
+
+	@Test
+	public void testSetProductStatus() throws Exception {
+		// setup
+		Product product = new Product("title", new Category("category"), new BigDecimal(10), ProductStatus.EXPECTED);
+		Shop shop = new Shop(new MockRepository());
+		// execute
+		shop.setProductStatus(product, ProductStatus.ABSENT);
+		// verify
+		assertThat(product.getStatus(), is(ProductStatus.ABSENT));
+	}
+
+	@Test
+	public void testSetProductPrice() throws Exception {
+		// setup
+		Product product = new Product("title", new Category("category"), new BigDecimal(10), ProductStatus.AVAILABLE);
+		Shop shop = new Shop(new MockRepository());
+		// execute
+		shop.setProductPrice(product, new BigDecimal(100));
+		// verify
+		assertThat(product.getPrice(), is(new BigDecimal(100)));
+
 	}
 }

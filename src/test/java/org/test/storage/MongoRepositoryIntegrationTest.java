@@ -88,4 +88,18 @@ public class MongoRepositoryIntegrationTest {
 		assertThat(actualProduct, is(expectedProduct));
 	}
 
+	@Test(expected = IllegalArgumentException.class)
+	public void testIllegalConstructorParameters() throws Exception {
+		new MongoRepository("", 0);
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testNullConstructorParameters() throws Exception {
+		new MongoRepository(null, 0);
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testIllegalConstructorArguments() throws Exception {
+		new MongoRepository("localhost", -4);
+	}
 }
