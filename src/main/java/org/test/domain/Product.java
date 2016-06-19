@@ -1,7 +1,12 @@
 package org.test.domain;
 
+import com.google.common.base.Strings;
+
 import java.math.BigDecimal;
 import java.util.Objects;
+
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Domain object represents product.
@@ -16,6 +21,8 @@ public class Product {
 	private ProductStatus status;
 
 	public Product(String title, Category category) {
+		checkArgument(!Strings.isNullOrEmpty(title));
+		checkNotNull(category);
 		this.title = title;
 		this.category = category;
 	}

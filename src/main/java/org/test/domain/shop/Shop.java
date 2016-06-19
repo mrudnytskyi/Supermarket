@@ -1,5 +1,6 @@
 package org.test.domain.shop;
 
+import com.google.common.base.Preconditions;
 import org.test.domain.Category;
 import org.test.domain.Product;
 import org.test.domain.ProductStatus;
@@ -9,6 +10,7 @@ import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Logger;
 
 /**
  * Default implementation for {@code AbstractShop} interface.
@@ -16,19 +18,21 @@ import java.util.Set;
  * @author Myroslav Rudnytskyi
  * @version 18.06.2016
  */
-// TODO : refactore to BuilderPattern for better interface
-// TODO : ShopBuilder.withRepository(new DBRepository()).withCategory("A").withCategory("B").build()
 public class Shop implements AbstractShop {
 
+	private static final Logger LOG = Logger.getLogger(Shop.class.getName());
+
 	private final Repository repository;
+
 	private final Set<Category> categories = new HashSet<>();
 
 	public Shop(Repository repository, String... categoryNames) {
+		Preconditions.checkNotNull(repository);
 		this.repository = repository;
 		for (String categoryName : categoryNames) {
 			boolean added = categories.add(new Category(categoryName));
 			if (!added) {
-				System.err.println("Ignoring not unique shop category...");
+				LOG.severe("Ignoring not unique shop category...");
 			}
 		}
 	}

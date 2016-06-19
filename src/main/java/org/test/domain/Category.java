@@ -1,5 +1,8 @@
 package org.test.domain;
 
+import com.google.common.base.Preconditions;
+import com.google.common.base.Strings;
+
 import java.util.Objects;
 
 /**
@@ -13,6 +16,7 @@ public class Category {
 	private final String name;
 
 	public Category(String name) {
+		Preconditions.checkArgument(!Strings.isNullOrEmpty(name));
 		this.name = name;
 	}
 

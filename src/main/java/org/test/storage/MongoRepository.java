@@ -1,5 +1,7 @@
 package org.test.storage;
 
+import com.google.common.base.Preconditions;
+import com.google.common.base.Strings;
 import com.google.gson.Gson;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
@@ -38,6 +40,8 @@ public class MongoRepository implements Repository {
 	}
 
 	public MongoRepository(String host, int port) {
+		Preconditions.checkArgument(!Strings.isNullOrEmpty(host));
+		Preconditions.checkArgument(port > 0);
 		client = new MongoClient(host, port);
 		database = client.getDatabase(DATABASE_NAME);
 		if (database.getCollection(COLLECTION_NAME) == null) {
