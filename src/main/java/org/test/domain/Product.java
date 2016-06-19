@@ -21,6 +21,12 @@ public class Product {
 		this.category = category;
 	}
 
+	public Product(String title, Category category, BigDecimal price, ProductStatus status) {
+		this(title, category);
+		this.price = price;
+		this.status = status;
+	}
+
 	public String getTitle() {
 		return title;
 	}
@@ -59,5 +65,10 @@ public class Product {
 	@Override
 	public int hashCode() {
 		return Objects.hash(title, price, status, category);
+	}
+
+	@Override
+	public String toString() {
+		return "Document{{" + "title=" + title + ", category=" + category + ", price=" + price + ", status=" + status + "}}";
 	}
 }
