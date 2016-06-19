@@ -2,8 +2,10 @@ package org.test.domain.shop;
 
 import org.test.domain.Category;
 import org.test.domain.Product;
+import org.test.domain.ProductStatus;
 import org.test.storage.MockRepository;
 
+import java.math.BigDecimal;
 import java.util.Set;
 
 /**
@@ -35,7 +37,17 @@ public enum PerfectShop implements AbstractShop {
 	}
 
 	@Override
-	public void addProduct(Product product, Category category) {
-		shop.addProduct(product, category);
+	public void addProduct(Product product) {
+		shop.addProduct(product);
+	}
+
+	@Override
+	public void setProductStatus(Product product, ProductStatus status) {
+		shop.setProductStatus(product, status);
+	}
+
+	@Override
+	public void serProductPrice(Product product, BigDecimal price) {
+		shop.serProductPrice(product, price);
 	}
 }

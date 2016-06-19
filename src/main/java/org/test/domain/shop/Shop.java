@@ -2,8 +2,10 @@ package org.test.domain.shop;
 
 import org.test.domain.Category;
 import org.test.domain.Product;
+import org.test.domain.ProductStatus;
 import org.test.storage.Repository;
 
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -43,8 +45,17 @@ public class Shop implements AbstractShop {
 	}
 
 	@Override
-	public void addProduct(Product product, Category category) {
-		product.setCategory(category);
+	public void addProduct(Product product) {
 		repository.insert(product);
+	}
+
+	@Override
+	public void setProductStatus(Product product, ProductStatus status) {
+
+	}
+
+	@Override
+	public void serProductPrice(Product product, BigDecimal price) {
+
 	}
 }
