@@ -47,7 +47,7 @@ public enum CheapShop implements AbstractShop {
 	}
 
 	@Override
-	public void serProductPrice(Product product, BigDecimal price) {
-		shop.serProductPrice(product, price);
+	public void setProductPrice(Product product, BigDecimal price) {
+		shop.setProductPrice(product, price);
 	}
 }

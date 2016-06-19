@@ -23,5 +23,5 @@ public interface AbstractShop {
 
 	void setProductStatus(Product product, ProductStatus status);
 
-	void serProductPrice(Product product, BigDecimal price);
+	void setProductPrice(Product product, BigDecimal price);
 }

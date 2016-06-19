@@ -56,7 +56,7 @@ public class Shop implements AbstractShop {
 	}
 
 	@Override
-	public void serProductPrice(Product product, BigDecimal price) {
+	public void setProductPrice(Product product, BigDecimal price) {
 		product.setPrice(price);
 		repository.update(product);
 	}
