@@ -26,8 +26,8 @@ import java.util.logging.Logger;
 public class Application {
 
 	public static final int POOL_SIZE = 2;
-	private static final AbstractShop perfectShop = ((ShopFactory) () -> PerfectShop.INSTANCE).createShop();
-	private static final AbstractShop cheapShop = ((ShopFactory) () -> CheapShop.INSTANCE).createShop();
+	private static final AbstractShop perfectShop = ((ShopFactory) PerfectShop::getInstance).createShop();
+	private static final AbstractShop cheapShop = ((ShopFactory) CheapShop::getInstance).createShop();
 	private static final Logger LOG = Logger.getLogger(Application.class.getName());
 
 	public static void main(String[] args) {

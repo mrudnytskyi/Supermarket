@@ -1,53 +1,30 @@
 package org.test.domain.shop;
 
-import org.test.domain.Category;
-import org.test.domain.Product;
-import org.test.domain.ProductStatus;
 import org.test.storage.MongoRepository;
-
-import java.math.BigDecimal;
-import java.util.Set;
 
 /**
  * Concrete shop class. Note, that this class created as
  * <a href="https://en.wikipedia.org/wiki/Singleton_pattern">singleton</a> due to business-rules.
- * <p>See <i>Effective Java 2nd Edition, Item 3: Enforce the singleton property with a private constructor or
- * an enum type</i> for the details how implement enum-based singletons.</p>
+ * <blockquote>If you need to use lazy initialization [...] on a static field, use the lazy
+ * initialization holder class idiom.</blockquote> See <i>Effective Java 2nd Edition, Item 71: Use lazy
+ * initialization judiciously</i> for the details.
+ * <p>Note, that these solution is thread-safe, because class initialization phase is non-concurrent, so no further
+ * synchronization is required in the {@link #getInstance()} method.</p> See
+ * <a href="https://docs.oracle.com/javase/specs/jls/se7/html/jls-12.html#jls-12.4">JLS</a> for details.
  *
  * @author Myroslav Rudnytskyi
  * @version 18.06.2016
  */
-public enum PerfectShop implements AbstractShop {
-	INSTANCE(new Shop(new MongoRepository(), "Perfect Goods", "Luxury Goods", "Exotic Goods"));
+public class PerfectShop {
 
-	private final Shop shop;
-
-	PerfectShop(Shop shop) {
-		this.shop = shop;
+	private PerfectShop() {
 	}
 
-	@Override
-	public Set<Category> getCategories() {
-		return shop.getCategories();
+	public static AbstractShop getInstance() {
+		return PerfectShopHolder.INSTANCE;
 	}
 
-	@Override
-	public Product[] getProducts(Category category) {
-		return shop.getProducts(category);
-	}
-
-	@Override
-	public void addProduct(Product product) {
-		shop.addProduct(product);
-	}
-
-	@Override
-	public void setProductStatus(Product product, ProductStatus status) {
-		shop.setProductStatus(product, status);
-	}
-
-	@Override
-	public void setProductPrice(Product product, BigDecimal price) {
-		shop.setProductPrice(product, price);
+	private static class PerfectShopHolder {
+		private static final AbstractShop INSTANCE = new Shop(new MongoRepository(), "Perfect Goods", "Luxury Goods", "Exotic Goods");
 	}
 }

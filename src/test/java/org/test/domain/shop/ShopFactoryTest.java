@@ -28,12 +28,12 @@ public class ShopFactoryTest {
 			add(new Category("Exotic Goods"));
 			add(new Category("Luxury Goods"));
 		}};
-		ShopFactory factory = () -> PerfectShop.INSTANCE;
+		ShopFactory factory = PerfectShop::getInstance;
 		// execute
 		AbstractShop shop = factory.createShop();
 		// verify
 		assertThat(shop, is(notNullValue()));
-		assertTrue(shop instanceof PerfectShop);
+		assertTrue(shop instanceof Shop);
 		assertEquals(shop.getCategories(), expectedCategories);
 	}
 
@@ -44,12 +44,12 @@ public class ShopFactoryTest {
 			add(new Category("Cheap Goods"));
 			add(new Category("Basic Goods"));
 		}};
-		ShopFactory factory = () -> CheapShop.INSTANCE;
+		ShopFactory factory = CheapShop::getInstance;
 		// execute
 		AbstractShop shop = factory.createShop();
 		// verify
 		assertThat(shop, is(notNullValue()));
-		assertTrue(shop instanceof CheapShop);
+		assertTrue(shop instanceof Shop);
 		assertEquals(shop.getCategories(), expectedCategories);
 	}
 }
