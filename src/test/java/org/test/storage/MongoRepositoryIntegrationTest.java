@@ -12,6 +12,7 @@ import org.test.domain.Product;
 import org.test.domain.ProductStatus;
 
 import java.math.BigDecimal;
+import java.net.URL;
 import java.util.List;
 
 import static org.hamcrest.core.Is.is;
@@ -31,15 +32,16 @@ public class MongoRepositoryIntegrationTest {
 	private MongoCollection<Document> productsCollection;
 	private Product expectedProduct;
 	private Document expectedProductDocument;
+	private Category category;
 
 	@Before
 	public void setUp() throws Exception {
 		repository = new MongoRepository();
 		mongoDatabase = repository.getMongoDatabase();
 		productsCollection = mongoDatabase.getCollection(MongoRepository.COLLECTION_NAME);
-		expectedProduct = new Product("test", new Category("test category"));
-		expectedProduct.setPrice(new BigDecimal(10));
-		expectedProduct.setStatus(ProductStatus.AVAILABLE);
+		category = new Category("test category", "this is test category", new URL("http://example.com/none.png"),
+				new BigDecimal(5));
+		expectedProduct = new Product("test", category, new BigDecimal(10), ProductStatus.AVAILABLE);
 		expectedProductDocument = Document.parse(gson.toJson(expectedProduct));
 	}
 
@@ -54,7 +56,7 @@ public class MongoRepositoryIntegrationTest {
 		// setup
 		productsCollection.insertOne(expectedProductDocument);
 		// execute
-		List<Product> actualProducts = repository.findByCategory(new Category("test category"));
+		List<Product> actualProducts = repository.findByCategory(category);
 		// verify
 		assertThat(actualProducts, is(notNullValue()));
 		assertThat(actualProducts.size(), is(1));

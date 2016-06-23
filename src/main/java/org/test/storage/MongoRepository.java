@@ -1,7 +1,5 @@
 package org.test.storage;
 
-import com.google.common.base.Preconditions;
-import com.google.common.base.Strings;
 import com.google.gson.Gson;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
@@ -15,6 +13,8 @@ import org.test.domain.Product;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Strings.isNullOrEmpty;
 import static com.mongodb.client.model.Filters.eq;
 
 /**
@@ -40,8 +40,8 @@ public class MongoRepository implements Repository {
 	}
 
 	public MongoRepository(String host, int port) {
-		Preconditions.checkArgument(!Strings.isNullOrEmpty(host));
-		Preconditions.checkArgument(port > 0);
+		checkArgument(!isNullOrEmpty(host));
+		checkArgument(port > 0);
 		client = new MongoClient(host, port);
 		database = client.getDatabase(DATABASE_NAME);
 		if (database.getCollection(COLLECTION_NAME) == null) {
@@ -79,8 +79,8 @@ public class MongoRepository implements Repository {
 	private ObjectId getObjectId(Product product) {
 		ObjectId id = null;
 		for (Document document : productsCollection.find(eq("title", product.getTitle()))) {
-			String category = document.get("category").toString();
-			if (category.equals(product.getCategory().toString())) {
+			Product foundProduct = gson.fromJson(document.toJson(), Product.class);
+			if (foundProduct.getCategory().equals(product.getCategory())) {
 				id = (ObjectId) document.get("_id");
 			}
 		}

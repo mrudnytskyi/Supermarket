@@ -3,6 +3,8 @@ package org.test.domain.shop;
 import org.junit.Test;
 import org.test.domain.Category;
 
+import java.math.BigDecimal;
+import java.net.URL;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -25,8 +27,8 @@ public class ShopFactoryTest {
 		// setup
 		Set<Category> expectedCategories = new HashSet<Category>() {{
 			add(new Category("Perfect Goods"));
-			add(new Category("Exotic Goods"));
-			add(new Category("Luxury Goods"));
+			add(new Category("Exotic Goods", "Exotic goods sale at 7% discount!", null, new BigDecimal(7)));
+			add(new Category("Luxury Goods", "Wanna some luxury?", new URL("http://perfect.com.ua/luxuary.png"), null));
 		}};
 		ShopFactory factory = new PerfectShopFactory();
 		// execute
@@ -42,7 +44,7 @@ public class ShopFactoryTest {
 		// setup
 		Set<Category> expectedCategories = new HashSet<Category>() {{
 			add(new Category("Cheap Goods"));
-			add(new Category("Basic Goods"));
+			add(new Category("Basic Goods", "All goods, which are necessary for human being", null, null));
 		}};
 		ShopFactory factory = new CheapShopFactory();
 		// execute

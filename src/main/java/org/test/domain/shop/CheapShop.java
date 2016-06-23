@@ -1,5 +1,6 @@
 package org.test.domain.shop;
 
+import org.test.domain.Category;
 import org.test.storage.MongoRepository;
 
 import static org.test.domain.shop.ShopRequisites.Builder.createRequisites;
@@ -31,7 +32,8 @@ public class CheapShop {
 				createRequisites("Cheap Shop").withDescription("Shop provides basic goods, so has low prices")
 						.withLogo("http://cheap.com.ua/logo.png").withEmail("admin@cheap.com.ua").build(),
 				new MongoRepository(),
-				"Cheap Goods", "Basic Goods"
+				new Category("Cheap Goods"),
+				new Category("Basic Goods", "All goods, which are necessary for human being", null, null)
 		);
 	}
 }

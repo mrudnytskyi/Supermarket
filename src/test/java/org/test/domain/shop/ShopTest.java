@@ -41,7 +41,7 @@ public class ShopTest {
 		Set<Category> expectedCategories = new HashSet<Category>() {{
 			add(new Category("Test category"));
 		}};
-		Shop shop = new Shop(requisitesStub, repositoryStub, "Test category");
+		Shop shop = new Shop(requisitesStub, repositoryStub, new Category("Test category"));
 		// execute
 		Set<Category> actualCategories = shop.getCategories();
 		// verify

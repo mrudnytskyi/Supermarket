@@ -1,6 +1,11 @@
 package org.test.domain.shop;
 
+import org.test.domain.Category;
 import org.test.storage.MongoRepository;
+
+import java.math.BigDecimal;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import static org.test.domain.shop.ShopRequisites.Builder.createRequisites;
 
@@ -31,7 +36,17 @@ public class PerfectShop {
 				createRequisites("Perfect Shop").withDescription("Shop provides only perfect luxury or exotic goods")
 						.withEmail("contact@perfect.com.ua").withLogo("http://perfect.com.ua/shop-logo.png").build(),
 				new MongoRepository(),
-				"Perfect Goods", "Luxury Goods", "Exotic Goods"
+				new Category("Perfect Goods"),
+				new Category("Luxury Goods", "Wanna some luxury?", createURL("http://perfect.com.ua/luxuary.png"), null),
+				new Category("Exotic Goods", "Exotic goods sale at 7% discount!", null, new BigDecimal(7))
 		);
+
+		private static URL createURL(String url) {
+			try {
+				return new URL(url);
+			} catch (MalformedURLException e) {
+				throw new IllegalArgumentException(e);
+			}
+		}
 	}
 }

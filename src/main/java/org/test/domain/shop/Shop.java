@@ -1,6 +1,5 @@
 package org.test.domain.shop;
 
-import com.google.common.base.Preconditions;
 import org.test.domain.Category;
 import org.test.domain.Product;
 import org.test.domain.ProductStatus;
@@ -11,6 +10,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Default implementation for {@code AbstractShop} interface.
@@ -28,13 +29,13 @@ public class Shop implements AbstractShop {
 
 	private final Set<Category> categories = new HashSet<>();
 
-	public Shop(AbstractShopRequisites requisites, Repository repository, String... categoryNames) {
-		Preconditions.checkNotNull(requisites);
-		Preconditions.checkNotNull(repository);
+	public Shop(AbstractShopRequisites requisites, Repository repository, Category... categories) {
+		checkNotNull(requisites);
+		checkNotNull(repository);
 		this.requisites = requisites;
 		this.repository = repository;
-		for (String categoryName : categoryNames) {
-			boolean added = categories.add(new Category(categoryName));
+		for (Category category : categories) {
+			boolean added = this.categories.add(category);
 			if (!added) {
 				LOG.severe("Ignoring not unique shop category...");
 			}
