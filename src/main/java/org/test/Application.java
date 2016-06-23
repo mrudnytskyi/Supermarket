@@ -4,9 +4,8 @@ import org.test.domain.Category;
 import org.test.domain.Product;
 import org.test.domain.ProductStatus;
 import org.test.domain.shop.AbstractShop;
-import org.test.domain.shop.CheapShop;
-import org.test.domain.shop.PerfectShop;
-import org.test.domain.shop.ShopFactory;
+import org.test.domain.shop.CheapShopFactory;
+import org.test.domain.shop.PerfectShopFactory;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -26,14 +25,12 @@ import java.util.logging.Logger;
 public class Application {
 
 	public static final int POOL_SIZE = 2;
-	private static final AbstractShop perfectShop = ((ShopFactory) PerfectShop::getInstance).createShop();
-	private static final AbstractShop cheapShop = ((ShopFactory) CheapShop::getInstance).createShop();
 	private static final Logger LOG = Logger.getLogger(Application.class.getName());
 
 	public static void main(String[] args) {
 		ScheduledExecutorService executorService = Executors.newScheduledThreadPool(POOL_SIZE);
-		executorService.schedule((Runnable) () -> Application.supermarketRoutine(perfectShop), 0, TimeUnit.SECONDS);
-		executorService.schedule((Runnable) () -> Application.supermarketRoutine(cheapShop), 10, TimeUnit.SECONDS);
+		executorService.schedule(perfectShopRoutine(), 0, TimeUnit.SECONDS);
+		executorService.schedule(cheapShopRoutine(), 10, TimeUnit.SECONDS);
 		executorService.shutdown();
 		try {
 			executorService.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
@@ -41,6 +38,14 @@ public class Application {
 			LOG.severe(e.getMessage());
 		}
 		LOG.info("All threads stopped!");
+	}
+
+	private static Runnable perfectShopRoutine() {
+		return () -> Application.supermarketRoutine(new PerfectShopFactory().createShop());
+	}
+
+	private static Runnable cheapShopRoutine() {
+		return () -> Application.supermarketRoutine(new CheapShopFactory().createShop());
 	}
 
 	private static void supermarketRoutine(AbstractShop shop) {

@@ -28,7 +28,7 @@ public class ShopFactoryTest {
 			add(new Category("Exotic Goods"));
 			add(new Category("Luxury Goods"));
 		}};
-		ShopFactory factory = PerfectShop::getInstance;
+		ShopFactory factory = new PerfectShopFactory();
 		// execute
 		AbstractShop shop = factory.createShop();
 		// verify
@@ -44,7 +44,7 @@ public class ShopFactoryTest {
 			add(new Category("Cheap Goods"));
 			add(new Category("Basic Goods"));
 		}};
-		ShopFactory factory = CheapShop::getInstance;
+		ShopFactory factory = new CheapShopFactory();
 		// execute
 		AbstractShop shop = factory.createShop();
 		// verify
