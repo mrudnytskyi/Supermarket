@@ -2,6 +2,8 @@ package org.test.domain.shop;
 
 import org.test.storage.MongoRepository;
 
+import static org.test.domain.shop.ShopRequisites.Builder.createRequisites;
+
 /**
  * Concrete shop class. Note, that this class created as
  * <a href="https://en.wikipedia.org/wiki/Singleton_pattern">singleton</a> due to business-rules.
@@ -25,6 +27,11 @@ public class CheapShop {
 	}
 
 	private static class CheapShopHolder {
-		private static final AbstractShop INSTANCE = new Shop(new MongoRepository(), "Cheap Goods", "Basic Goods");
+		private static final AbstractShop INSTANCE = new Shop(
+				createRequisites("Cheap Shop").withDescription("Shop provides basic goods, so has low prices")
+						.withLogo("http://cheap.com.ua/logo.png").withEmail("admin@cheap.com.ua").build(),
+				new MongoRepository(),
+				"Cheap Goods", "Basic Goods"
+		);
 	}
 }

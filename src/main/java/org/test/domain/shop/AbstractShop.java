@@ -15,6 +15,8 @@ import java.util.Set;
  */
 public interface AbstractShop {
 
+	AbstractShopRequisites getRequisites();
+
 	Set<Category> getCategories();
 
 	Product[] getProducts(Category category);

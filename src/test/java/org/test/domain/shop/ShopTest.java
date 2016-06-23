@@ -1,5 +1,6 @@
 package org.test.domain.shop;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.test.domain.Category;
@@ -26,13 +27,20 @@ import static org.mockito.Mockito.times;
  */
 public class ShopTest {
 
+	private AbstractShopRequisites requisitesStub;
+
+	@Before
+	public void setUp() throws Exception {
+		requisitesStub = Mockito.spy(AbstractShopRequisites.class);
+	}
+
 	@Test
 	public void testGetCategories() throws Exception {
 		// setup
 		Set<Category> expectedCategories = new HashSet<Category>() {{
 			add(new Category("Test category"));
 		}};
-		Shop shop = new Shop(new MockRepository(), "Test category");
+		Shop shop = new Shop(requisitesStub, new MockRepository(), "Test category");
 		// execute
 		Set<Category> actualCategories = shop.getCategories();
 		// verify
@@ -43,7 +51,7 @@ public class ShopTest {
 	@Test
 	public void testGetCategoriesEmpty() throws Exception {
 		// setup
-		Shop shop = new Shop(new MockRepository());
+		Shop shop = new Shop(requisitesStub, new MockRepository());
 		// execute
 		Set<Category> actualCategories = shop.getCategories();
 		// verify
@@ -60,25 +68,30 @@ public class ShopTest {
 		Mockito.when(mock.findByCategory(category)).thenReturn(new ArrayList<Product>() {{
 			add(product);
 		}});
-		Shop shop = new Shop(mock);
+		Shop shop = new Shop(requisitesStub, mock);
 		// execute
 		Product[] actualProducts = shop.getProducts(category);
 		// verify
 		assertThat(actualProducts, is(notNullValue()));
 		assertArrayEquals(new Product[]{product}, actualProducts);
-		Mockito.verify(mock, times(1));
+		Mockito.verify(mock, times(1)).findByCategory(category);
 	}
 
 	@Test(expected = NullPointerException.class)
-	public void testNullConstructorParameter() throws Exception {
-		new Shop(null);
+	public void testNullConstructorFirstParameter() throws Exception {
+		new Shop(null, Mockito.spy(Repository.class));
+	}
+
+	@Test(expected = NullPointerException.class)
+	public void testNullConstructorSecondParameter() throws Exception {
+		new Shop(requisitesStub, null);
 	}
 
 	@Test
 	public void testSetProductStatus() throws Exception {
 		// setup
 		Product product = new Product("title", new Category("category"), new BigDecimal(10), ProductStatus.EXPECTED);
-		Shop shop = new Shop(new MockRepository());
+		Shop shop = new Shop(requisitesStub, new MockRepository());
 		// execute
 		shop.setProductStatus(product, ProductStatus.ABSENT);
 		// verify
@@ -89,7 +102,7 @@ public class ShopTest {
 	public void testSetProductPrice() throws Exception {
 		// setup
 		Product product = new Product("title", new Category("category"), new BigDecimal(10), ProductStatus.AVAILABLE);
-		Shop shop = new Shop(new MockRepository());
+		Shop shop = new Shop(requisitesStub, new MockRepository());
 		// execute
 		shop.setProductPrice(product, new BigDecimal(100));
 		// verify

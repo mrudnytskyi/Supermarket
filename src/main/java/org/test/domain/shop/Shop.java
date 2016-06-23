@@ -22,12 +22,16 @@ public class Shop implements AbstractShop {
 
 	private static final Logger LOG = Logger.getLogger(Shop.class.getName());
 
+	private final AbstractShopRequisites requisites;
+
 	private final Repository repository;
 
 	private final Set<Category> categories = new HashSet<>();
 
-	public Shop(Repository repository, String... categoryNames) {
+	public Shop(AbstractShopRequisites requisites, Repository repository, String... categoryNames) {
+		Preconditions.checkNotNull(requisites);
 		Preconditions.checkNotNull(repository);
+		this.requisites = requisites;
 		this.repository = repository;
 		for (String categoryName : categoryNames) {
 			boolean added = categories.add(new Category(categoryName));
@@ -35,6 +39,11 @@ public class Shop implements AbstractShop {
 				LOG.severe("Ignoring not unique shop category...");
 			}
 		}
+	}
+
+	@Override
+	public AbstractShopRequisites getRequisites() {
+		return requisites;
 	}
 
 	@Override

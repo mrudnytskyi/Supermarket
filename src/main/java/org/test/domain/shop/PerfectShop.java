@@ -2,6 +2,8 @@ package org.test.domain.shop;
 
 import org.test.storage.MongoRepository;
 
+import static org.test.domain.shop.ShopRequisites.Builder.createRequisites;
+
 /**
  * Concrete shop class. Note, that this class created as
  * <a href="https://en.wikipedia.org/wiki/Singleton_pattern">singleton</a> due to business-rules.
@@ -25,6 +27,11 @@ public class PerfectShop {
 	}
 
 	private static class PerfectShopHolder {
-		private static final AbstractShop INSTANCE = new Shop(new MongoRepository(), "Perfect Goods", "Luxury Goods", "Exotic Goods");
+		private static final AbstractShop INSTANCE = new Shop(
+				createRequisites("Perfect Shop").withDescription("Shop provides only perfect luxury or exotic goods")
+						.withEmail("contact@perfect.com.ua").withLogo("http://perfect.com.ua/shop-logo.png").build(),
+				new MongoRepository(),
+				"Perfect Goods", "Luxury Goods", "Exotic Goods"
+		);
 	}
 }
