@@ -6,7 +6,6 @@ import org.mockito.Mockito;
 import org.test.domain.Category;
 import org.test.domain.Product;
 import org.test.domain.ProductStatus;
-import org.test.storage.MockRepository;
 import org.test.storage.Repository;
 
 import java.math.BigDecimal;
@@ -28,10 +27,12 @@ import static org.mockito.Mockito.times;
 public class ShopTest {
 
 	private AbstractShopRequisites requisitesStub;
+	private Repository repositoryStub;
 
 	@Before
 	public void setUp() throws Exception {
 		requisitesStub = Mockito.spy(AbstractShopRequisites.class);
+		repositoryStub = Mockito.spy(Repository.class);
 	}
 
 	@Test
@@ -40,7 +41,7 @@ public class ShopTest {
 		Set<Category> expectedCategories = new HashSet<Category>() {{
 			add(new Category("Test category"));
 		}};
-		Shop shop = new Shop(requisitesStub, new MockRepository(), "Test category");
+		Shop shop = new Shop(requisitesStub, repositoryStub, "Test category");
 		// execute
 		Set<Category> actualCategories = shop.getCategories();
 		// verify
@@ -51,7 +52,7 @@ public class ShopTest {
 	@Test
 	public void testGetCategoriesEmpty() throws Exception {
 		// setup
-		Shop shop = new Shop(requisitesStub, new MockRepository());
+		Shop shop = new Shop(requisitesStub, repositoryStub);
 		// execute
 		Set<Category> actualCategories = shop.getCategories();
 		// verify
@@ -62,24 +63,24 @@ public class ShopTest {
 	@Test
 	public void testGetProducts() throws Exception {
 		// setup
-		Repository mock = Mockito.mock(Repository.class);
+		Repository repositoryMock = Mockito.mock(Repository.class);
 		Category category = new Category("test");
 		Product product = new Product("test product", new Category("test category"));
-		Mockito.when(mock.findByCategory(category)).thenReturn(new ArrayList<Product>() {{
+		Mockito.when(repositoryMock.findByCategory(category)).thenReturn(new ArrayList<Product>() {{
 			add(product);
 		}});
-		Shop shop = new Shop(requisitesStub, mock);
+		Shop shop = new Shop(requisitesStub, repositoryMock);
 		// execute
 		Product[] actualProducts = shop.getProducts(category);
 		// verify
 		assertThat(actualProducts, is(notNullValue()));
 		assertArrayEquals(new Product[]{product}, actualProducts);
-		Mockito.verify(mock, times(1)).findByCategory(category);
+		Mockito.verify(repositoryMock, times(1)).findByCategory(category);
 	}
 
 	@Test(expected = NullPointerException.class)
 	public void testNullConstructorFirstParameter() throws Exception {
-		new Shop(null, Mockito.spy(Repository.class));
+		new Shop(null, repositoryStub);
 	}
 
 	@Test(expected = NullPointerException.class)
@@ -91,7 +92,7 @@ public class ShopTest {
 	public void testSetProductStatus() throws Exception {
 		// setup
 		Product product = new Product("title", new Category("category"), new BigDecimal(10), ProductStatus.EXPECTED);
-		Shop shop = new Shop(requisitesStub, new MockRepository());
+		Shop shop = new Shop(requisitesStub, repositoryStub);
 		// execute
 		shop.setProductStatus(product, ProductStatus.ABSENT);
 		// verify
@@ -102,7 +103,7 @@ public class ShopTest {
 	public void testSetProductPrice() throws Exception {
 		// setup
 		Product product = new Product("title", new Category("category"), new BigDecimal(10), ProductStatus.AVAILABLE);
-		Shop shop = new Shop(requisitesStub, new MockRepository());
+		Shop shop = new Shop(requisitesStub, repositoryStub);
 		// execute
 		shop.setProductPrice(product, new BigDecimal(100));
 		// verify
