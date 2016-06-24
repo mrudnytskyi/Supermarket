@@ -1,21 +1,30 @@
 package org.test.storage;
 
 import com.google.gson.Gson;
+import com.mongodb.Block;
 import com.mongodb.MongoClient;
+import com.mongodb.MongoClientOptions;
 import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
-import org.bson.types.ObjectId;
+import org.bson.conversions.Bson;
 import org.test.domain.Category;
+import org.test.domain.CategoryCodec;
 import org.test.domain.Product;
+import org.test.domain.ProductStatus;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Strings.isNullOrEmpty;
+import static com.mongodb.MongoClient.getDefaultCodecRegistry;
+import static com.mongodb.MongoClientOptions.builder;
+import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Filters.eq;
+import static org.bson.codecs.configuration.CodecRegistries.fromCodecs;
+import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
 
 /**
  * Class provides access to the <a href="https://www.mongodb.com">MongoDB</a> storage using
@@ -26,12 +35,10 @@ import static com.mongodb.client.model.Filters.eq;
  */
 public class MongoRepository implements Repository {
 
-	public static final String DATABASE_NAME = "supermarket";
 	public static final String COLLECTION_NAME = "products";
 
 	private final MongoClient client;
 	private final MongoCollection<Document> productsCollection;
-
 	private final Gson gson = new Gson();
 	private MongoDatabase database;
 
@@ -40,26 +47,35 @@ public class MongoRepository implements Repository {
 	}
 
 	public MongoRepository(String host, int port) {
+		client = createMongoClient(host, port);
+		database = client.getDatabase("supermarket");
+		productsCollection = createOrGetProductsCollection();
+	}
+
+	private MongoClient createMongoClient(String host, int port) {
 		checkArgument(!isNullOrEmpty(host));
 		checkArgument(port > 0);
-		client = new MongoClient(host, port);
-		database = client.getDatabase(DATABASE_NAME);
+
+		MongoClientOptions options = builder().codecRegistry(fromRegistries(
+				fromCodecs(new CategoryCodec()),
+				getDefaultCodecRegistry())
+		).build();
+		return new MongoClient(host + ":" + port, options);
+	}
+
+	private MongoCollection<Document> createOrGetProductsCollection() {
 		if (database.getCollection(COLLECTION_NAME) == null) {
 			database.createCollection(COLLECTION_NAME);
 		}
-		productsCollection = database.getCollection(COLLECTION_NAME);
+		return database.getCollection(COLLECTION_NAME);
 	}
 
 	@Override
 	public List<Product> findByCategory(Category category) {
-		MongoCursor<Document> queriedProducts = productsCollection.find().iterator();
 		List<Product> result = new ArrayList<>();
-		while (queriedProducts.hasNext()) {
-			Product product = gson.fromJson(queriedProducts.next().toJson(), Product.class);
-			if (product.getCategory().equals(category)) {
-				result.add(product);
-			}
-		}
+		productsCollection.find(createFullEqualityFilter(category)).forEach(
+				(Block<? super Document>) document -> result.add(gson.fromJson(document.toJson(), Product.class))
+		);
 		return result;
 	}
 
@@ -70,21 +86,30 @@ public class MongoRepository implements Repository {
 
 	@Override
 	public void update(Product product) {
-		ObjectId id = getObjectId(product);
-		Document update = new Document("$set",
-				new Document("price", product.getPrice().toString()).append("status", product.getStatus().name()));
-		productsCollection.updateOne(eq("_id", id), update);
+		String title = product.getTitle();
+		Category category = product.getCategory();
+		BigDecimal price = product.getPrice();
+		ProductStatus status = product.getStatus();
+
+		Bson update = new Document("$set", new Document("price", price.intValue()).append("status", status.name()));
+		Bson filter = and(eq("title", title), createFullEqualityFilter(category));
+		productsCollection.updateOne(filter, update);
 	}
 
-	private ObjectId getObjectId(Product product) {
-		ObjectId id = null;
-		for (Document document : productsCollection.find(eq("title", product.getTitle()))) {
-			Product foundProduct = gson.fromJson(document.toJson(), Product.class);
-			if (foundProduct.getCategory().equals(product.getCategory())) {
-				id = (ObjectId) document.get("_id");
-			}
+	private Bson createFullEqualityFilter(Category category) {
+		List<Bson> eql = new ArrayList<Bson>() {{
+			add(eq("category.name", category.getName()));
+		}};
+		if (category.getDescription() != null) {
+			eql.add(eq("category.description", category.getDescription()));
 		}
-		return id;
+		if (category.getLogoUrl() != null) {
+			eql.add(eq("category.logoUrl", category.getLogoUrl().toString()));
+		}
+		if (category.getDiscountPercentage() != null) {
+			eql.add(eq("category.discountPercentage", category.getDiscountPercentage().intValue()));
+		}
+		return and(eql);
 	}
 
 	@Override
