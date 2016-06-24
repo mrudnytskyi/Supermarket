@@ -54,24 +54,42 @@ public class Shop implements AbstractShop {
 
 	@Override
 	public Product[] getProducts(Category category) {
+		if (nullArgs(category)) return new Product[]{};
+
 		List<Product> found = repository.findByCategory(category);
 		return found.toArray(new Product[found.size()]);
 	}
 
 	@Override
 	public void addProduct(Product product) {
+		if (nullArgs(product)) return;
+
 		repository.insert(product);
 	}
 
 	@Override
 	public void setProductStatus(Product product, ProductStatus status) {
+		if (nullArgs(product, status)) return;
+
 		product.setStatus(status);
 		repository.update(product);
 	}
 
 	@Override
 	public void setProductPrice(Product product, BigDecimal price) {
+		if (nullArgs(price, product)) return;
+
 		product.setPrice(price);
 		repository.update(product);
+	}
+
+	private boolean nullArgs(Object... objects) {
+		for (Object o : objects) {
+			if (o == null) {
+				LOG.severe("Null argument provided. Abort operation!");
+				return true;
+			}
+		}
+		return false;
 	}
 }
